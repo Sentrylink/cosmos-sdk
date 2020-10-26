@@ -2,7 +2,6 @@ package types
 
 import (
 	"bytes"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"strings"
@@ -257,32 +256,6 @@ func (ma ModuleAccount) MarshalYAML() (interface{}, error) {
 	}
 
 	return string(bs), nil
-}
-
-// MarshalJSON returns the JSON representation of a ModuleAccount.
-func (ma ModuleAccount) MarshalJSON() ([]byte, error) {
-	return json.Marshal(moduleAccountPretty{
-		Address:       ma.Address,
-		PubKey:        "",
-		AccountNumber: ma.AccountNumber,
-		Sequence:      ma.Sequence,
-		Name:          ma.Name,
-		Permissions:   ma.Permissions,
-	})
-}
-
-// UnmarshalJSON unmarshals raw JSON bytes into a ModuleAccount.
-func (ma *ModuleAccount) UnmarshalJSON(bz []byte) error {
-	var alias moduleAccountPretty
-	if err := json.Unmarshal(bz, &alias); err != nil {
-		return err
-	}
-
-	ma.BaseAccount = NewBaseAccount(alias.Address, nil, alias.AccountNumber, alias.Sequence)
-	ma.Name = alias.Name
-	ma.Permissions = alias.Permissions
-
-	return nil
 }
 
 // AccountI is an interface used to store coins at a given address within state.
